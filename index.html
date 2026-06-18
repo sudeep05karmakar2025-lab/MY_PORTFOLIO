@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sudeep Karmakar — Portfolio</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy:    '#0A0E1A',
+            card:    '#111827',
+            midtone: '#1E3A5F',
+            sky:     '#38BDF8',
+            mint:    '#64FFDA',
+            slate:   '#94A3B8',
+            muted:   '#475569',
+          },
+          fontFamily: {
+            display: ['Space Grotesk', 'sans-serif'],
+            body:    ['Inter', 'sans-serif'],
+            mono:    ['JetBrains Mono', 'monospace'],
+          },
+        },
+      },
+    }
+  </script>
+
+  <style>
+    /* ── Base ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: #0A0E1A;
+      color: #CBD5E1;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── Grid background ──────────────────────────────────────── */
+    .grid-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(56,189,248,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 40%, transparent 100%);
+    }
+
+    /* ── Glow orb ────────────────────────────────────────────── */
+    .orb {
+      position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0;
+    }
+
+    /* ── Navbar ──────────────────────────────────────────────── */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      transition: background .3s, box-shadow .3s;
+    }
+    #navbar.scrolled {
+      background: rgba(10,14,26,.88);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 rgba(56,189,248,.1);
+    }
+
+    .nav-link {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .875rem; font-weight: 500; letter-spacing: .03em;
+      color: #94A3B8;
+      transition: color .2s;
+      position: relative;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1.5px; background: #38BDF8; transform: scaleX(0);
+      transform-origin: left; transition: transform .25s;
+    }
+    .nav-link:hover { color: #38BDF8; }
+    .nav-link:hover::after { transform: scaleX(1); }
+
+    /* ── Cursor blink ─────────────────────────────────────────── */
+    .cursor {
+      display: inline-block; width: 3px; height: 1em;
+      background: #64FFDA; margin-left: 4px; vertical-align: middle;
+      animation: blink .8s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* ── Gradient text ────────────────────────────────────────── */
+    .grad-text {
+      background: linear-gradient(135deg, #38BDF8 0%, #64FFDA 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Buttons ─────────────────────────────────────────────── */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: .7rem 1.6rem; border-radius: 6px; font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif; font-size: .9rem;
+      background: linear-gradient(135deg, #38BDF8, #64FFDA);
+      color: #0A0E1A; transition: opacity .2s, transform .2s;
+    }
+    .btn-primary:hover { opacity: .88; transform: translateY(-2px); }
+
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: .7rem 1.6rem; border-radius: 6px; font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif; font-size: .9rem;
+      border: 1.5px solid #38BDF8; color: #38BDF8;
+      transition: background .2s, transform .2s;
+    }
+    .btn-outline:hover { background: rgba(56,189,248,.1); transform: translateY(-2px); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: .5rem 1rem; border-radius: 6px; font-weight: 500;
+      font-family: 'Space Grotesk', sans-serif; font-size: .82rem;
+      border: 1px solid #1E3A5F; color: #94A3B8;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-ghost:hover { border-color: #38BDF8; color: #38BDF8; }
+
+    .btn-sm-primary {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: .45rem 1rem; border-radius: 5px; font-size: .8rem; font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif;
+      background: linear-gradient(135deg, #38BDF8, #64FFDA);
+      color: #0A0E1A; transition: opacity .2s;
+    }
+    .btn-sm-primary:hover { opacity: .85; }
+
+    /* ── Section label ────────────────────────────────────────── */
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem; letter-spacing: .15em; text-transform: uppercase;
+      color: #64FFDA; margin-bottom: .5rem;
+    }
+
+    /* ── Divider ──────────────────────────────────────────────── */
+    .h-divider {
+      height: 1px; background: linear-gradient(90deg, transparent, #1E3A5F 40%, #1E3A5F 60%, transparent);
+      margin: 0 auto;
+    }
+
+    /* ── Skill card ───────────────────────────────────────────── */
+    .skill-card {
+      background: #111827;
+      border: 1px solid #1E3A5F;
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: border-color .25s, box-shadow .25s, transform .25s;
+    }
+    .skill-card:hover {
+      border-color: #38BDF8;
+      box-shadow: 0 0 24px rgba(56,189,248,.12);
+      transform: translateY(-4px);
+    }
+    .skill-badge {
+      display: inline-flex; align-items: center;
+      padding: .3rem .75rem; border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace; font-size: .78rem;
+      background: rgba(56,189,248,.08); border: 1px solid rgba(56,189,248,.2);
+      color: #38BDF8; white-space: nowrap;
+    }
+
+    /* ── Project card ─────────────────────────────────────────── */
+    .project-card {
+      background: #111827;
+      border: 1px solid #1E3A5F;
+      border-radius: 14px;
+      padding: 2rem;
+      display: flex; flex-direction: column;
+      transition: border-color .25s, box-shadow .25s, transform .25s;
+    }
+    .project-card:hover {
+      border-color: #38BDF8;
+      box-shadow: 0 0 32px rgba(56,189,248,.1);
+      transform: translateY(-5px);
+    }
+    .project-card.placeholder { border-style: dashed; opacity: .45; }
+    .project-card.placeholder:hover { transform: none; box-shadow: none; border-color: #1E3A5F; }
+
+    .tag {
+      display: inline-flex; align-items: center;
+      padding: .22rem .65rem; border-radius: 999px; font-size: .72rem;
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(100,255,218,.08); border: 1px solid rgba(100,255,218,.2);
+      color: #64FFDA;
+    }
+
+    /* ── Contact form ─────────────────────────────────────────── */
+    .form-input {
+      width: 100%; background: #0D1322; border: 1px solid #1E3A5F;
+      border-radius: 8px; padding: .75rem 1rem;
+      color: #CBD5E1; font-family: 'Inter', sans-serif; font-size: .9rem;
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: #38BDF8;
+      box-shadow: 0 0 0 3px rgba(56,189,248,.1);
+    }
+    .form-input::placeholder { color: #475569; }
+
+    /* ── Social icon ──────────────────────────────────────────── */
+    .social-link {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px; border-radius: 10px;
+      border: 1px solid #1E3A5F; color: #94A3B8;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .social-link:hover { border-color: #38BDF8; color: #38BDF8; background: rgba(56,189,248,.08); }
+
+    /* ── Quick fact ───────────────────────────────────────────── */
+    .fact-row {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .75rem 0; border-bottom: 1px solid #1a2540;
+    }
+    .fact-row:last-child { border-bottom: none; }
+
+    /* ── Hero code card ───────────────────────────────────────── */
+    .code-card {
+      background: #0D1322; border: 1px solid #1E3A5F;
+      border-radius: 12px; overflow: hidden;
+      font-family: 'JetBrains Mono', monospace; font-size: .8rem;
+    }
+    .code-card-header {
+      background: #111827; padding: .6rem 1rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    /* ── Mobile menu ──────────────────────────────────────────── */
+    #mobile-menu {
+      display: none;
+      background: rgba(10,14,26,.97);
+      backdrop-filter: blur(16px);
+    }
+    #mobile-menu.open { display: block; }
+
+    /* ── Scroll reveal ─────────────────────────────────────────  */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Toast ────────────────────────────────────────────────── */
+    #toast {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+      background: #111827; border: 1px solid #38BDF8;
+      color: #64FFDA; font-family: 'Space Grotesk', sans-serif;
+      padding: .75rem 1.25rem; border-radius: 8px;
+      font-size: .875rem; font-weight: 500;
+      transform: translateY(100px); opacity: 0;
+      transition: transform .35s, opacity .35s;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ── Misc ─────────────────────────────────────────────────── */
+    section { position: relative; }
+    a { text-decoration: none; }
+    :focus-visible { outline: 2px solid #38BDF8; outline-offset: 3px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ─────────────────────────────────────────────────────────────
+     NAVBAR
+──────────────────────────────────────────────────────────────── -->
+<nav id="navbar" class="py-4 px-6 md:px-12">
+  <div class="max-w-6xl mx-auto flex items-center justify-between">
+
+    <!-- Logo -->
+    <a href="#hero" class="flex items-center gap-2">
+      <span class="font-display font-700 text-xl text-white tracking-tight">
+        Sudeep <span class="grad-text">Karmakar</span>
+      </span>
+    </a>
+
+    <!-- Desktop links -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#about"   class="nav-link">About</a>
+      <a href="#skills"  class="nav-link">Skills</a>
+      <a href="#projects"class="nav-link">Projects</a>
+      <a href="#contact" class="nav-link">Contact</a>
+      <a href="https://www.linkedin.com/in/sudeep-karmakar-535207398/"
+         target="_blank" rel="noopener" class="btn-primary text-sm py-2 px-4">
+        Hire Me
+      </a>
+    </div>
+
+    <!-- Hamburger -->
+    <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Open menu">
+      <span class="block w-6 h-0.5 bg-slate-400 transition-all" id="bar1"></span>
+      <span class="block w-6 h-0.5 bg-slate-400 transition-all" id="bar2"></span>
+      <span class="block w-5 h-0.5 bg-slate-400 transition-all" id="bar3"></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="md:hidden mt-2 px-6 py-4 rounded-xl mx-4">
+    <div class="flex flex-col gap-4">
+      <a href="#about"    class="nav-link text-base" onclick="closeMobileMenu()">About</a>
+      <a href="#skills"   class="nav-link text-base" onclick="closeMobileMenu()">Skills</a>
+      <a href="#projects" class="nav-link text-base" onclick="closeMobileMenu()">Projects</a>
+      <a href="#contact"  class="nav-link text-base" onclick="closeMobileMenu()">Contact</a>
+      <a href="https://www.linkedin.com/in/sudeep-karmakar-535207398/"
+         target="_blank" rel="noopener" class="btn-primary w-fit">Hire Me</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ─────────────────────────────────────────────────────────────
+     HERO
+──────────────────────────────────────────────────────────────── -->
+<section id="hero" class="relative min-h-screen flex items-center pt-20 pb-16 overflow-hidden">
+
+  <!-- Grid background -->
+  <div class="grid-bg"></div>
+
+  <!-- Orbs -->
+  <div class="orb w-96 h-96 bg-sky/10" style="top:-10%;left:-8%;"></div>
+  <div class="orb w-80 h-80 bg-mint/8" style="bottom:5%;right:-5%;"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-6 md:px-12 w-full">
+    <div class="grid md:grid-cols-5 gap-12 items-center">
+
+      <!-- Left: text -->
+      <div class="md:col-span-3">
+        <p class="section-label mb-4">// welcome</p>
+
+        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-700 text-white leading-tight mb-6">
+          Hi, I'm&nbsp;<span class="grad-text" id="typed-name"></span><span class="cursor"></span>
+        </h1>
+
+        <p class="text-sky font-display font-500 text-base sm:text-lg mb-4 leading-snug">
+          B.Tech Student in Computer Science and Business Systems<br>
+          <span class="text-slate font-400">@ Narula Institute of Technology</span>
+        </p>
+
+        <p class="text-slate text-base sm:text-lg mb-10 max-w-lg">
+          Passionate about Core Java, web development, data analytics, and building
+          <span class="text-mint font-500">technology-driven solutions</span> that matter.
+        </p>
+
+        <div class="flex flex-wrap gap-4">
+          <a href="#projects" class="btn-primary">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24"><path d="M2 12h20M13 5l7 7-7 7"/></svg>
+            View My Work
+          </a>
+          <a href="https://www.linkedin.com/in/sudeep-karmakar-535207398/"
+             target="_blank" rel="noopener" class="btn-outline">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+              <circle cx="4" cy="4" r="2"/>
+            </svg>
+            LinkedIn Profile
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: code card -->
+      <div class="md:col-span-2 hidden md:block">
+        <div class="code-card shadow-2xl">
+          <div class="code-card-header">
+            <div class="dot bg-red-500"></div>
+            <div class="dot bg-yellow-400"></div>
+            <div class="dot bg-green-400"></div>
+            <span class="ml-2 text-muted text-xs">sudeep.java</span>
+          </div>
+          <pre class="p-5 text-xs leading-relaxed overflow-x-auto" style="color:#94A3B8;"><span style="color:#64FFDA;">public class</span> <span style="color:#38BDF8;">Sudeep</span> {
+
+  <span style="color:#64FFDA;">String</span> role     = <span style="color:#a8ff78;">"CS &amp; Business Systems"</span>;
+  <span style="color:#64FFDA;">String</span> college   = <span style="color:#a8ff78;">"Narula Institute"</span>;
+  <span style="color:#64FFDA;">int</span>    year      = 4;
+  <span style="color:#64FFDA;">String</span> focus     = <span style="color:#a8ff78;">"Core Java"</span>;
+
+  <span style="color:#64FFDA;">String[]</span> skills  = {
+    <span style="color:#a8ff78;">"Java"</span>, <span style="color:#a8ff78;">"Python"</span>, <span style="color:#a8ff78;">"C"</span>,
+    <span style="color:#a8ff78;">"Web Dev"</span>, <span style="color:#a8ff78;">"Data Analytics"</span>
+  };
+
+  <span style="color:#64FFDA;">boolean</span> available = <span style="color:#f97316;">true</span>;
+
+}</pre>
+        </div>
+
+        <!-- Mini stats -->
+        <div class="grid grid-cols-2 gap-3 mt-4">
+          <div class="bg-card border border-midtone/50 rounded-lg p-3 text-center">
+            <p class="font-display font-700 text-2xl grad-text">2+</p>
+            <p class="text-slate text-xs mt-0.5">Projects Built</p>
+          </div>
+          <div class="bg-card border border-midtone/50 rounded-lg p-3 text-center">
+            <p class="font-display font-700 text-2xl grad-text">5+</p>
+            <p class="text-slate text-xs mt-0.5">Technologies</p>
+          </div>
+          <div class="bg-card border border-midtone/50 rounded-lg p-3 text-center">
+            <p class="font-display font-700 text-2xl grad-text">4th</p>
+            <p class="text-slate text-xs mt-0.5">Year Student</p>
+          </div>
+          <div class="bg-card border border-midtone/50 rounded-lg p-3 text-center">
+            <p class="font-display font-700 text-2xl grad-text">2027</p>
+            <p class="text-slate text-xs mt-0.5">Graduation</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 opacity-40">
+      <span class="text-xs font-mono text-slate">scroll</span>
+      <svg class="animate-bounce text-sky" width="16" height="16" fill="none" stroke="currentColor"
+           stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
+  </div>
+</section>
+
+
+<div class="h-divider max-w-5xl mx-6 md:mx-auto"></div>
+
+
+<!-- ─────────────────────────────────────────────────────────────
+     ABOUT
+──────────────────────────────────────────────────────────────── -->
+<section id="about" class="py-24 px-6 md:px-12">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="reveal mb-14">
+      <p class="section-label">// about me</p>
+      <h2 class="font-display text-3xl sm:text-4xl font-700 text-white">
+        The person behind the code
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-5 gap-12 items-start">
+
+      <!-- Biography -->
+      <div class="md:col-span-3 reveal">
+        <!-- Avatar placeholder -->
+        <div class="w-20 h-20 rounded-full mb-6 flex items-center justify-center
+                    bg-gradient-to-br from-sky to-mint shadow-lg shadow-sky/20 text-3xl font-display font-700 text-navy select-none">
+          <img src="img1.jpeg" alt="My_Image" class="w-full h-full object-cover rounded-full" />
+        </div>
+
+        <p class="text-slate text-base sm:text-lg leading-relaxed mb-5">
+          I am a <span class="text-white font-500">4th-year Computer Science and Business Systems</span> student at
+          <span class="text-sky font-500">Narula Institute of Technology</span>
+          (Expected graduation: <span class="text-mint font-500">June 2027</span>).
+        </p>
+        <p class="text-slate text-base sm:text-lg leading-relaxed mb-5">
+          Combining a strong programming foundation in C and Core Java with practical web development skills,
+          my primary focus lies in <span class="text-white font-500">Core Java</span>. I am continuously
+          expanding my expertise in data science and analytics to build impactful, modern tech solutions
+          that bridge the gap between engineering and business.
+        </p>
+        <p class="text-slate text-base sm:text-lg leading-relaxed">
+          When I'm not writing code, you'll find me exploring the latest tech advancements, hitting the gym,
+          or capturing moments through photography and videography.
+        </p>
+      </div>
+
+      <!-- Quick facts sidebar -->
+      <div class="md:col-span-2 reveal">
+        <div class="bg-card border border-midtone/60 rounded-2xl p-6">
+          <h3 class="font-display font-600 text-white text-lg mb-4 flex items-center gap-2">
+            <span class="text-sky">&#9432;</span> Quick Facts
+          </h3>
+
+          <div class="fact-row">
+            <div class="w-8 h-8 rounded-lg bg-sky/10 border border-sky/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="14" height="14" fill="none" stroke="#38BDF8" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                <circle cx="12" cy="9" r="2.5"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-xs text-muted font-mono mb-0.5">LOCATION</p>
+              <p class="text-white text-sm font-500">Barasat, Kolkata 700124</p>
+            </div>
+          </div>
+
+          <div class="fact-row">
+            <div class="w-8 h-8 rounded-lg bg-sky/10 border border-sky/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="14" height="14" fill="none" stroke="#38BDF8" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-xs text-muted font-mono mb-0.5">EMAIL</p>
+              <a href="mailto:sudeepkarmakar120@gmail.com"
+                 class="text-sky text-sm font-500 hover:text-mint transition-colors break-all">
+                sudeepkarmakar120@gmail.com
+              </a>
+            </div>
+          </div>
+
+          <div class="fact-row">
+            <div class="w-8 h-8 rounded-lg bg-sky/10 border border-sky/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="14" height="14" fill="none" stroke="#38BDF8" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-xs text-muted font-mono mb-0.5">INTERESTS</p>
+              <p class="text-white text-sm font-500">Tech advancements, Fitness,<br>Photography &amp; Videography</p>
+            </div>
+          </div>
+
+          <div class="fact-row">
+            <div class="w-8 h-8 rounded-lg bg-sky/10 border border-sky/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="14" height="14" fill="none" stroke="#38BDF8" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="text-xs text-muted font-mono mb-0.5">LANGUAGES</p>
+              <div class="flex flex-wrap gap-1.5 mt-1">
+                <span class="tag">English</span>
+                <span class="tag">Hindi</span>
+                <span class="tag">Bengali</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<div class="h-divider max-w-5xl mx-6 md:mx-auto"></div>
+
+
+<!-- ─────────────────────────────────────────────────────────────
+     SKILLS
+──────────────────────────────────────────────────────────────── -->
+<section id="skills" class="py-24 px-6 md:px-12 relative overflow-hidden">
+
+  <div class="orb w-72 h-72 bg-sky/6" style="top:0;right:-5%;"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+
+    <div class="reveal mb-14">
+      <p class="section-label">// technical skills</p>
+      <h2 class="font-display text-3xl sm:text-4xl font-700 text-white">
+        What I work with
+      </h2>
+      <p class="text-slate mt-3 max-w-xl">
+        A curated set of languages, frameworks, and tools I use to bring ideas to life.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- Card 1 -->
+      <div class="skill-card reveal">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-10 h-10 rounded-lg bg-sky/10 border border-sky/20 flex items-center justify-center">
+            <svg width="18" height="18" fill="none" stroke="#38BDF8" stroke-width="1.8" viewBox="0 0 24 24">
+              <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <h3 class="font-display font-600 text-white text-base">Core Programming &amp; OOP</h3>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="skill-badge">Core Java</span>
+          <span class="skill-badge">Python</span>
+          <span class="skill-badge">C</span>
+          <span class="skill-badge">OOP</span>
+        </div>
+        <p class="text-slate text-xs mt-4 leading-relaxed">
+          Strong grounding in object-oriented design principles, memory management in C, and
+          building scalable applications in Java and Python.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="skill-card reveal" style="transition-delay:.08s;">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-10 h-10 rounded-lg bg-mint/10 border border-mint/20 flex items-center justify-center">
+            <svg width="18" height="18" fill="none" stroke="#64FFDA" stroke-width="1.8" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+            </svg>
+          </div>
+          <h3 class="font-display font-600 text-white text-base">Web Development</h3>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="skill-badge" style="border-color:rgba(100,255,218,.2);color:#64FFDA;background:rgba(100,255,218,.08);">HTML</span>
+          <span class="skill-badge" style="border-color:rgba(100,255,218,.2);color:#64FFDA;background:rgba(100,255,218,.08);">CSS</span>
+          <span class="skill-badge" style="border-color:rgba(100,255,218,.2);color:#64FFDA;background:rgba(100,255,218,.08);">JavaScript</span>
+        </div>
+        <p class="text-slate text-xs mt-4 leading-relaxed">
+          Crafting responsive, accessible front-end interfaces using semantic HTML, modern CSS layouts,
+          and vanilla JavaScript.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="skill-card reveal" style="transition-delay:.16s;">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-400/20 flex items-center justify-center">
+            <svg width="18" height="18" fill="none" stroke="#a78bfa" stroke-width="1.8" viewBox="0 0 24 24">
+              <ellipse cx="12" cy="5" rx="9" ry="3"/>
+              <path d="M21 12c0 1.66-4 3-9 3S3 13.66 3 12"/>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+            </svg>
+          </div>
+          <h3 class="font-display font-600 text-white text-base">Data &amp; Databases</h3>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="skill-badge" style="border-color:rgba(167,139,250,.2);color:#a78bfa;background:rgba(167,139,250,.08);">SQL</span>
+          <span class="skill-badge" style="border-color:rgba(167,139,250,.2);color:#a78bfa;background:rgba(167,139,250,.08);">DSA</span>
+          <span class="skill-badge" style="border-color:rgba(167,139,250,.2);color:#a78bfa;background:rgba(167,139,250,.08);">Data Analytics</span>
+          <span class="skill-badge" style="border-color:rgba(167,139,250,.2);color:#a78bfa;background:rgba(167,139,250,.08);">Data Science</span>
+        </div>
+        <p class="text-slate text-xs mt-4 leading-relaxed">
+          Hands-on experience with relational databases, query optimization, and foundational data
+          science techniques for deriving meaningful insights.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<div class="h-divider max-w-5xl mx-6 md:mx-auto"></div>
+
+
+<!-- ─────────────────────────────────────────────────────────────
+     PROJECTS
+──────────────────────────────────────────────────────────────── -->
+<section id="projects" class="py-24 px-6 md:px-12 relative overflow-hidden">
+
+  <div class="orb w-80 h-80 bg-mint/6" style="bottom:-5%;left:-8%;"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+
+    <div class="reveal mb-14">
+      <p class="section-label">// projects</p>
+      <h2 class="font-display text-3xl sm:text-4xl font-700 text-white">
+        Things I've built
+      </h2>
+      <p class="text-slate mt-3 max-w-xl">
+        A selection of projects that reflect my problem-solving approach and technical interests.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+
+      <!-- Project 1 -->
+      <div class="project-card reveal">
+        <!-- Header line -->
+        <div class="flex items-start justify-between mb-5">
+          <div class="w-12 h-12 rounded-xl bg-sky/10 border border-sky/20 flex items-center justify-center">
+            <svg width="22" height="22" fill="none" stroke="#38BDF8" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            </svg>
+          </div>
+          <a href="https://github.com/sudeep05karmakar2025-lab/Shop-Inventory-Manager-and-Bill-History-Tracker"
+             target="_blank" rel="noopener"
+             class="text-muted hover:text-sky transition-colors" aria-label="GitHub repo">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.52 11.52 0 0 1 3-.405c1.02.005 2.045.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+          </a>
+        </div>
+
+        <h3 class="font-display font-600 text-white text-lg mb-2">
+          Shop Inventory Manager &amp; Bill History Tracker
+        </h3>
+
+        <p class="text-slate text-sm leading-relaxed mb-5 flex-1">
+          A cross-platform desktop application for managing shop inventories and tracking billing history
+          in real time. Features include product catalogue management, dynamic bill generation, sales
+          history logging, and stock-level alerts — designed to simplify everyday retail operations for
+          small and medium businesses.
+        </p>
+
+        <!-- Compatibility tags -->
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="tag">Windows 11</span>
+          <span class="tag">Mac</span>
+          <span class="tag">Android</span>
+          <span class="tag">iPhone</span>
+        </div>
+
+        <div class="flex gap-3 mt-auto">
+          <a href="https://github.com/sudeep05karmakar2025-lab/Shop-Inventory-Manager-and-Bill-History-Tracker"
+             target="_blank" rel="noopener" class="btn-sm-primary">
+            <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.107-.776.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+            View Code
+          </a>
+          <button class="btn-ghost" title="Live demo coming soon" onclick="showToast('Live demo coming soon!')">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            Live Demo
+          </button>
+        </div>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="project-card reveal" style="transition-delay:.08s;">
+        <div class="flex items-start justify-between mb-5">
+          <div class="w-12 h-12 rounded-xl bg-mint/10 border border-mint/20 flex items-center justify-center">
+            <svg width="22" height="22" fill="none" stroke="#64FFDA" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </div>
+          <a href="https://github.com/sudeep05karmakar2025-lab/Online-Image-and-Live-camera-Face-Detector.git"
+             target="_blank" rel="noopener"
+             class="text-muted hover:text-mint transition-colors" aria-label="GitHub repo">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.52 11.52 0 0 1 3-.405c1.02.005 2.045.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+          </a>
+        </div>
+
+        <h3 class="font-display font-600 text-white text-lg mb-2">
+          Image to Face Verification Software Website
+        </h3>
+
+        <p class="text-slate text-sm leading-relaxed mb-5 flex-1">
+          A web-based face detection platform built with Python and Computer Vision. Supports both
+          static image uploads and live camera streams for real-time face identification and verification.
+          Leverages deep learning-based facial recognition models to accurately detect, locate, and
+          annotate faces — useful for security, attendance, and identity verification workflows.
+        </p>
+
+        <!-- Tech tags -->
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="tag" style="border-color:rgba(100,255,218,.2);color:#64FFDA;">Python</span>
+          <span class="tag" style="border-color:rgba(100,255,218,.2);color:#64FFDA;">Computer Vision</span>
+          <span class="tag" style="border-color:rgba(100,255,218,.2);color:#64FFDA;">Face Detection</span>
+          <span class="tag" style="border-color:rgba(100,255,218,.2);color:#64FFDA;">Web Integration</span>
+        </div>
+
+        <div class="flex gap-3 mt-auto">
+          <a href="https://github.com/sudeep05karmakar2025-lab/Online-Image-and-Live-camera-Face-Detector.git"
+             target="_blank" rel="noopener" class="btn-sm-primary">
+            <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.107-.776.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+            View Code
+          </a>
+          <button class="btn-ghost" onclick="showToast('Live demo coming soon!')">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            Live Demo
+          </button>
+        </div>
+      </div>
+
+      <!-- Placeholder card -->
+      <div class="project-card placeholder reveal" style="transition-delay:.16s;">
+        <div class="flex items-start justify-between mb-5">
+          <div class="w-12 h-12 rounded-xl bg-slate/10 border border-slate/20 flex items-center justify-center">
+            <svg width="22" height="22" fill="none" stroke="#94A3B8" stroke-width="1.8" viewBox="0 0 24 24">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </div>
+        </div>
+
+        <h3 class="font-display font-600 text-white text-lg mb-2">Your Next Project</h3>
+
+        <p class="text-slate text-sm leading-relaxed mb-5 flex-1">
+          This card is reserved for your upcoming project. Add the project details — title, description,
+          tech stack, and links — to expand your portfolio.
+        </p>
+
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="tag">Coming Soon</span>
+        </div>
+
+        <div class="flex gap-3 mt-auto">
+          <button class="btn-ghost opacity-50 cursor-not-allowed" disabled>
+            View Code
+          </button>
+          <button class="btn-ghost opacity-50 cursor-not-allowed" disabled>
+            Live Demo
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<div class="h-divider max-w-5xl mx-6 md:mx-auto"></div>
+
+
+<!-- ─────────────────────────────────────────────────────────────
+     CONTACT
+──────────────────────────────────────────────────────────────── -->
+<section id="contact" class="py-24 px-6 md:px-12 relative overflow-hidden">
+
+  <div class="orb w-96 h-96 bg-sky/5" style="top:-10%;right:5%;"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+
+    <div class="reveal mb-14">
+      <p class="section-label">// contact</p>
+      <h2 class="font-display text-3xl sm:text-4xl font-700 text-white">
+        Let's get in touch
+      </h2>
+      <p class="text-slate mt-3 max-w-xl">
+        Have an opportunity, collaboration idea, or just want to say hi?
+        My inbox is always open.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-12 items-start">
+
+      <!-- Form -->
+      <div class="reveal">
+        <form id="contact-form" onsubmit="handleSubmit(event)" novalidate>
+          <div class="mb-5">
+            <label class="block text-slate text-sm font-500 mb-2 font-mono" for="name">Name</label>
+            <input id="name" name="name" type="text" required
+                   class="form-input" placeholder="Your full name" />
+          </div>
+          <div class="mb-5">
+            <label class="block text-slate text-sm font-500 mb-2 font-mono" for="email">Email</label>
+            <input id="email" name="email" type="email" required
+                   class="form-input" placeholder="you@example.com" />
+          </div>
+          <div class="mb-6">
+            <label class="block text-slate text-sm font-500 mb-2 font-mono" for="message">Message</label>
+            <textarea id="message" name="message" rows="5" required
+                      class="form-input resize-none"
+                      placeholder="Tell me about your project or just say hello…"></textarea>
+          </div>
+          <button type="submit" class="btn-primary w-full justify-center text-base py-3">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+            Send Message
+          </button>
+        </form>
+      </div>
+
+      <!-- Direct info -->
+      <div class="reveal" style="transition-delay:.08s;">
+        <div class="bg-card border border-midtone/60 rounded-2xl p-6 mb-6">
+          <h3 class="font-display font-600 text-white text-base mb-4">Direct Contact</h3>
+          <a href="mailto:sudeepkarmakar120@gmail.com"
+             class="flex items-center gap-3 text-sky hover:text-mint transition-colors group">
+            <div class="w-10 h-10 rounded-lg bg-sky/10 border border-sky/20 flex items-center
+                        justify-center group-hover:border-mint/30 transition-colors">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <span class="font-mono text-sm">sudeepkarmakar120@gmail.com</span>
+          </a>
+        </div>
+
+        <div class="bg-card border border-midtone/60 rounded-2xl p-6">
+          <h3 class="font-display font-600 text-white text-base mb-4">Find me online</h3>
+          <div class="flex gap-3">
+
+            <!-- GitHub -->
+            <a href="https://github.com/sudeep05karmakar2025-lab"
+               target="_blank" rel="noopener"
+               class="social-link flex-1 !w-auto gap-2 px-4 text-sm font-500 font-display"
+               aria-label="GitHub">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.52 11.52 0 0 1 3-.405c1.02.005 2.045.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+              </svg>
+              GitHub
+            </a>
+
+            <!-- LinkedIn -->
+            <a href="https://www.linkedin.com/in/sudeep-karmakar-535207398/"
+               target="_blank" rel="noopener"
+               class="social-link flex-1 !w-auto gap-2 px-4 text-sm font-500 font-display"
+               aria-label="LinkedIn">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+                <circle cx="4" cy="4" r="2"/>
+              </svg>
+              LinkedIn
+            </a>
+
+          </div>
+
+          <div class="mt-5 p-4 rounded-xl bg-navy/60 border border-sky/10">
+            <p class="text-slate text-xs leading-relaxed">
+              <span class="text-mint font-mono">// available</span> — Open to internship
+              opportunities, freelance projects, and collaborations.
+              I typically respond within 24 hours.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ─────────────────────────────────────────────────────────────
+     FOOTER
+──────────────────────────────────────────────────────────────── -->
+<footer class="border-t border-midtone/30 py-8 px-6 md:px-12">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+    <p class="font-display font-600 text-white">
+      Sudeep <span class="grad-text">Karmakar</span>
+    </p>
+    <p class="text-muted text-sm font-mono">
+      &copy; <span id="year"></span> · Crafted with ❤️ and Java
+    </p>
+    <div class="flex gap-3">
+      <a href="https://github.com/sudeep05karmakar2025-lab"
+         target="_blank" rel="noopener" class="social-link" aria-label="GitHub">
+        <svg width="17" height="17" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.84 1.236 1.84 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.52 11.52 0 0 1 3-.405c1.02.005 2.045.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+        </svg>
+      </a>
+      <a href="https://www.linkedin.com/in/sudeep-karmakar-535207398/"
+         target="_blank" rel="noopener" class="social-link" aria-label="LinkedIn">
+        <svg width="17" height="17" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+          <circle cx="4" cy="4" r="2"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div id="toast">✓ Message sent successfully!</div>
+
+
+<!-- ─────────────────────────────────────────────────────────────
+     JAVASCRIPT
+──────────────────────────────────────────────────────────────── -->
+<script>
+  /* ── Year ─────────────────────────────────────────── */
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ── Navbar scroll ────────────────────────────────── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  /* ── Hamburger ────────────────────────────────────── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+    const isOpen = mobileMenu.classList.contains('open');
+    document.getElementById('bar1').style.transform = isOpen ? 'rotate(45deg) translate(5px,5px)' : '';
+    document.getElementById('bar2').style.opacity  = isOpen ? '0' : '1';
+    document.getElementById('bar3').style.transform = isOpen ? 'rotate(-45deg) translate(5px,-5px)' : '';
+  });
+  function closeMobileMenu() { mobileMenu.classList.remove('open'); }
+
+  /* ── Typed hero name ──────────────────────────────── */
+  const target = 'Sudeep Karmakar';
+  const el     = document.getElementById('typed-name');
+  let idx = 0;
+  function type() {
+    if (idx <= target.length) {
+      el.textContent = target.slice(0, idx++);
+      setTimeout(type, idx === 1 ? 500 : 70);
+    }
+  }
+  type();
+
+  /* ── Scroll reveal ────────────────────────────────── */
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => revealObs.observe(el));
+
+  /* ── Contact form ─────────────────────────────────── */
+  function handleSubmit(e) {
+    e.preventDefault();
+    const name    = document.getElementById('name').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (!name || !email || !message) {
+      showToast('Please fill in all fields.', true);
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showToast('Please enter a valid email.', true);
+      return;
+    }
+
+    // Mailto fallback
+    const subject = encodeURIComponent(`Portfolio Contact from ${name}`);
+    const body    = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+    window.location.href = `mailto:sudeepkarmakar120@gmail.com?subject=${subject}&body=${body}`;
+
+    document.getElementById('contact-form').reset();
+    showToast('Opening your mail client…');
+  }
+
+  /* ── Toast ────────────────────────────────────────── */
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.color = isError ? '#f87171' : '#64FFDA';
+    t.style.borderColor = isError ? '#f87171' : '#38BDF8';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+
+</body>
+</html>
